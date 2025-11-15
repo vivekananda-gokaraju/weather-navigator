@@ -11,103 +11,110 @@
 
 <style>
 body {
-  margin:0;
-  height:100vh;
-  background:#111;
-  color:#fff;
-  font-family:system-ui, sans-serif;
-  overflow:hidden;
+  margin: 0;
+  height: 100vh;
+  background: #e9e9e9;
+  color: #000;
+  font-family: system-ui, sans-serif;
+  overflow: hidden;
 }
 
 /* Map */
-#map { width:100%; height:100vh; }
+#map { 
+  width: 100%; 
+  height: 100vh; 
+}
 
 /* Info panel */
 .info-panel {
-  position:absolute;
-  top:20px;
-  right:20px;
-  width:340px;
-  z-index:1000;
-  display:flex;
-  flex-direction:column;
-  gap:1rem;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 340px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-/* Card common */
+/* Glassy card */
 .card-weather {
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(10px);
-  border-radius:14px;
-  padding:1rem;
-  box-shadow:0 6px 16px rgba(0,0,0,0.4);
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(14px);
+  border-radius: 16px;
+  padding: 1rem;
+  color: #000;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Card 1: City & coords */
+.card-weather:hover {
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+}
+
+/* Card 1 */
 .card-city {
-  text-align:right;
-  font-size:0.85rem;
-  opacity:0.85;
+  text-align: right;
+  font-size: 0.85rem;
 }
 .card-city #time {
-  margin-top:0.5rem;
-  font-size:0.85rem;
-  color:#ccc;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #333;
 }
 
-/* Card 2: Temperature */
+/* Card 2 */
 .card-temp {
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:0.1rem;
-  text-align:center;
-  padding:1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  text-align: center;
+  padding: 1rem 1rem;
 }
 .card-temp img {
-  width:70px;
-  height:70px;
-  margin-bottom:0.1rem;
+  width: 70px;
+  height: 70px;
 }
 .card-temp #temp {
-  font-size:2.3rem;
-  font-weight:bold;
-  margin:0;
+  font-size: 2.3rem;
+  font-weight: bold;
 }
 .card-temp small {
-  color:#ccc;
-  font-size:0.95rem;
-  margin-bottom:0.5rem;
+  color: #333;
+  font-size: 0.95rem;
 }
 
-/* Card 3: Detailed metrics */
+/* Card 3 */
 .card-details {
-  padding:1rem;
+  padding: 1rem;
 }
 .metric {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:0.5rem 0;
-  font-size:0.85rem;
-  border-top:1px solid rgba(255,255,255,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  font-size: 0.85rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
 }
-.metric:first-child { border-top:none; }
-.metric i { margin-right:6px; opacity:0.7; }
+.metric:first-child { border-top: none; }
+.metric i { margin-right: 6px; opacity: 0.75; }
 
 /* Responsive */
-@media (max-width:767px){
-  body{overflow:auto;}
-  #map{height:70vh;}
-  .info-panel{
-    position:relative;
-    width:95%;
-    margin:0 auto;
-    top:auto;
-    right:auto;
+@media (max-width: 767px) {
+  body { overflow: auto; }
+  #map { height: 70vh; }
+  .info-panel {
+    position: relative;
+    width: 95%;
+    margin: 0 auto;
+    top: auto;
+    right: auto;
   }
-  .card-temp img { width:60px; height:60px; }
-  .card-temp #temp { font-size:2rem; }
+  .card-temp img { width: 60px; height: 60px; }
+  .card-temp #temp { font-size: 2rem; }
 }
 </style>
 </head>
@@ -116,21 +123,21 @@ body {
 <div id="map"></div>
 
 <div class="info-panel">
-  <!-- Card 1: City & Coordinates + Local Time -->
+  <!-- City -->
   <div class="card-weather card-city">
     <span id="city">—</span>, <span id="country">—</span><br>
     Lat: <strong id="lat">—</strong> Lon: <strong id="lon">—</strong>
     <div id="time">--:--</div>
   </div>
 
-  <!-- Card 2: Temperature -->
+  <!-- Temp -->
   <div class="card-weather card-temp">
     <img id="weather-icon" src="" alt="">
     <span id="temp">--°C</span>
     <small id="feels">Feels like --°C</small>
   </div>
 
-  <!-- Card 3: Detailed Metrics -->
+  <!-- Metrics -->
   <div class="card-weather card-details">
     <div class="metric"><span><i class="bi bi-wind"></i>Wind</span><span id="wind">—</span></div>
     <div class="metric"><span><i class="bi bi-droplet"></i>Humidity</span><span id="humidity">—</span></div>
@@ -145,94 +152,98 @@ body {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
 <script>
 const API_KEY = "e1ff48b65c50970d0dadbba9dbc60e10";
 
+// Initialize map
 const map = L.map('map').setView([20.5937, 78.9629], 5);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{ maxZoom:19, attribution:'&copy; OpenStreetMap'}).addTo(map);
-const marker = L.marker([20.5937,78.9629],{draggable:true}).addTo(map);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
+  maxZoom: 19, attribution: '&copy; OpenStreetMap' 
+}).addTo(map);
 
+// Draggable marker
+const marker = L.marker([20.5937,78.9629], { draggable: true }).addTo(map);
 marker.on('dragend', e => { 
   const {lat, lng} = e.target.getLatLng(); 
-  updateLatLon(lat,lng); 
-  getWeather(lat,lng); 
+  updateCoordinates(lat, lng); 
+  getWeather(lat, lng); 
 });
 
+// Ask for current location
 if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(pos=>{
+  navigator.geolocation.getCurrentPosition(pos => {
     const {latitude, longitude} = pos.coords; 
-    map.setView([latitude, longitude],10); 
+    map.setView([latitude, longitude], 10); 
     marker.setLatLng([latitude, longitude]); 
-    updateLatLon(latitude, longitude); 
+    updateCoordinates(latitude, longitude); 
     getWeather(latitude, longitude);
   });
-} else getWeather(20.5937,78.9629);
+} else {
+  getWeather(20.5937, 78.9629);
+}
 
-function updateLatLon(lat, lon){ 
+// Update coordinates display
+function updateCoordinates(lat, lon) { 
   document.getElementById('lat').textContent = lat.toFixed(3); 
   document.getElementById('lon').textContent = lon.toFixed(3); 
 }
 
-function calculateMoonPhase(date){
+// Moon phase calculation
+function calculateMoonPhase(date) {
   const lp = 2551443;
   const new_moon = new Date(1970,0,7,20,35,0).getTime()/1000;
   const phase = ((date.getTime()/1000 - new_moon) % lp)/lp;
-  if(phase<0.03||phase>0.97) return "New Moon";
-  else if(phase<0.22) return "Waxing Crescent";
-  else if(phase<0.28) return "First Quarter";
-  else if(phase<0.47) return "Waxing Gibbous";
-  else if(phase<0.53) return "Full Moon";
-  else if(phase<0.72) return "Waning Gibbous";
-  else if(phase<0.78) return "Last Quarter";
+  if (phase < 0.03 || phase > 0.97) return "New Moon";
+  else if (phase < 0.22) return "Waxing Crescent";
+  else if (phase < 0.28) return "First Quarter";
+  else if (phase < 0.47) return "Waxing Gibbous";
+  else if (phase < 0.53) return "Full Moon";
+  else if (phase < 0.72) return "Waning Gibbous";
+  else if (phase < 0.78) return "Last Quarter";
   else return "Waning Crescent";
 }
 
-async function getWeather(lat, lon){
-  try{
-    // Current weather
+// Fetch weather data
+async function getWeather(lat, lon) {
+  try {
     const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`);
     const d = await res.json();
 
-    // Card 1
     document.getElementById('city').textContent = d.name;
     document.getElementById('country').textContent = d.sys.country;
+    document.getElementById('temp').textContent = Math.round(d.main.temp) + "°C";
+    document.getElementById('feels').textContent = "Feels like " + Math.round(d.main.feels_like) + "°C";
 
-    // Card 2
-    document.getElementById('temp').textContent = Math.round(d.main.temp)+"°C";
-    document.getElementById('feels').textContent = "Feels like "+Math.round(d.main.feels_like)+"°C";
     const icon = d.weather[0].icon;
-    document.getElementById('weather-icon').src=`https://openweathermap.org/img/wn/${icon}@2x.png`;
+    document.getElementById('weather-icon').src = `https://openweathermap.org/img/wn/${icon}@2x.png`;
 
-    // Card 3
-    document.getElementById('wind').textContent = d.wind.speed+" m/s";
-    document.getElementById('humidity').textContent = d.main.humidity+"%";
-    document.getElementById('clouds').textContent = d.clouds.all+"%";
-    document.getElementById('pressure').textContent = d.main.pressure+" hPa";
-    document.getElementById('visibility').textContent = (d.visibility/1000).toFixed(1)+" km";
-    document.getElementById('sunrise').textContent = new Date(d.sys.sunrise*1000).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-    document.getElementById('sunset').textContent = new Date(d.sys.sunset*1000).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+    document.getElementById('wind').textContent = d.wind.speed + " m/s";
+    document.getElementById('humidity').textContent = d.main.humidity + "%";
+    document.getElementById('clouds').textContent = d.clouds.all + "%";
+    document.getElementById('pressure').textContent = d.main.pressure + " hPa";
+    document.getElementById('visibility').textContent = (d.visibility / 1000).toFixed(1) + " km";
+    document.getElementById('sunrise').textContent = new Date(d.sys.sunrise * 1000).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+    document.getElementById('sunset').textContent = new Date(d.sys.sunset * 1000).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
     document.getElementById('moon').textContent = calculateMoonPhase(new Date());
 
-    // Update local time using timezone offset from current weather
-    updateLocalTimeWithOffset(d.timezone);
-
-  }catch(e){ console.error(e); }
+    updateLocalTime(d.timezone);
+  } catch(e) { console.error(e); }
 }
 
-// Local time using timezone offset in seconds
-function updateLocalTimeWithOffset(timezoneOffsetSec){
-    const nowUtc = new Date().getTime();
-    const localMs = nowUtc + timezoneOffsetSec * 1000;
-    const localDate = new Date(localMs);
+// Update local time
+function updateLocalTime(timezoneOffsetSec) {
+  const nowUtc = Date.now();
+  const localMs = nowUtc + timezoneOffsetSec * 1000;
+  const localDate = new Date(localMs);
 
-    const hours = localDate.getUTCHours().toString().padStart(2,'0');
-    const minutes = localDate.getUTCMinutes().toString().padStart(2,'0');
+  const hours = String(localDate.getUTCHours()).padStart(2,'0');
+  const minutes = String(localDate.getUTCMinutes()).padStart(2,'0');
 
-    const offsetHours = timezoneOffsetSec / 3600;
-    const offsetSign = offsetHours >= 0 ? '+' : '-';
-    const offsetStr = `GMT${offsetSign}${Math.abs(offsetHours)}`;
+  const offsetHours = timezoneOffsetSec / 3600;
+  const offsetSign = offsetHours >= 0 ? '+' : '-';
 
-    document.getElementById('time').textContent = `${hours}:${minutes} (${offsetStr})`;
+  document.getElementById('time').textContent = `${hours}:${minutes} (GMT${offsetSign}${Math.abs(offsetHours)})`;
 }
 </script>
 </body>
